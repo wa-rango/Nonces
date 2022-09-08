@@ -1,0 +1,96 @@
+<?php
+/*
+Plugin Name: Mi primer plugin
+Plugin URI: Http// Mi primer plugin.com
+Description: Este es mi primer plugin que va cambiar los titulos de cada entrada de un blog o categoria
+Version: 1.0
+Author: Alejandro Arango
+Author URI: Http://miurlpersonal.com
+License: GPL2
+License URI:  https://www.gnu.org/license/gpl-2.0.html
+Text Domain: miprimerplugin
+Domain Patch: /languages
+*/
+if( ! function_exists('mp_install') ) {
+    function mp_install(){
+    //Accion a ejecutar
+//    require_once 'activador.php';
+    }
+}
+
+if( ! class_exists('MP_Mi_Class') ) {
+    class  MP_Mi_Class {
+        
+    }
+}
+
+function mp_deactivation() {
+    // Accion a ejecutar
+    flush_rewrite_rules();
+}
+
+function mp_desinstall() {
+    // Borrar Tablas en la base de datos
+    // Quitar alguna configuraciones
+    // u Opciones 
+}
+
+register_activation_hook( __FILE__, 'mp_install' );
+register_deactivation_hook( __FILE__, 'mp_deactivation' );
+
+add_action( 'admin_menu', 'mp_options_page' );
+
+if( ! function_exists( 'mp_options_page') ) {
+     
+    function mp_options_page() {
+    
+        add_menu_page(
+            'MP Pruebas',
+            'MP Pruebas',
+            'manage_options',
+            'mp_pruebas',
+            'mp_pruebas_page_display',
+            '',
+            15
+        );
+     
+     }
+    
+}
+
+if( ! function_exists('mp_pruebas_page_display') ) {
+    
+    function mp_pruebas_page_display() {
+        
+        if( current_user_can( 'edit_others_posts') ) {
+            
+            $nonce = wp_create_nonce( 'mi_nonce_de_seguridad' );
+            
+            if( isset( $_POST['nonce'] ) && ! empty( $_POST['nonce'] ) ) {
+                
+                if( wp_verify_nonce( $_POST['nonce'], 'mi_nonce_de_seguridad' ) ) {
+                   
+                    echo "Hemos verificado correctamente el nonce recibido<br>
+                            Nonce: {$_POST['nonce']}<br>";
+                        
+                } else {
+                    echo "Este nonce no fue recibido o no es correcto";
+                }
+                
+            }
+            
+            ?>
+            <br>
+            <form action="" method="post">
+                <input name="nonce" type="hidden" value="2342342dffs">
+                <input name="eliminar" type="hidden" value="eliminar">
+                <button type="submit">Eliminar</button>
+            </form>
+            
+            <?php
+        
+        }
+    
+    }
+    
+}

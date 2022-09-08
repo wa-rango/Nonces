@@ -1,0 +1,20 @@
+
+$output = "<a href='".  esc_url('file://google.com.co',[ 'file', 'otro']). "' Title='Google now' >Google</a>";
+
+$html_permitidos = [
+    'a' => [
+        'href'=> [],
+        'title'=> [],
+    ],
+    'p'=> [],
+    'h3'=> [],
+    'strong'=> [],
+];
+
+$procolos = [
+    'file'
+];
+    
+echo wp_kses( $output, $html_permitidos , $protocolos );
+
+echo wp_kses_post( $content);
